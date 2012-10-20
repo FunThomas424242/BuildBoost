@@ -26,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import de.devboost.buildboost.BuildException;
@@ -47,6 +48,9 @@ public class RepositoriesFile extends AbstractArtifact {
 			this.type = type;
 			this.url = url;
 			this.subDirectories = new LinkedHashSet<String>();
+			
+			Properties properties=System.getProperties();
+			System.out.println(properties.toString());
 			//TODO we wouldn't need this if we create an extra repository for extensions
 			if (BUILD_BOOST_REPOSITORY_URL.equals(url)) { 
 				subDirectories.add("Core/");
