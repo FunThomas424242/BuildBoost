@@ -28,12 +28,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import de.devboost.buildboost.BuildException;
 
 @SuppressWarnings("serial")
 public class RepositoriesFile extends AbstractArtifact {
 	
+	private static final Logger logger = Logger.getLogger(RepositoriesFile.class.getName());
+
 	public static String SUB_DIR_SEPARATOR = "!";
 	
 	public static String[] SUPPORTED_TYPES = { "svn:", "git:", "get:" };
@@ -88,6 +92,7 @@ public class RepositoriesFile extends AbstractArtifact {
 				if (isComment(locationString)) {
 					continue readLine;
 				}
+				logger.info("Process Location:>" + locationString+"<");
 				for (String supportedType : SUPPORTED_TYPES) {
 					if (locationString.startsWith(supportedType)) {
 						String type = supportedType.substring(0, supportedType.length() - 1);
@@ -111,6 +116,7 @@ public class RepositoriesFile extends AbstractArtifact {
 				}
 				
 				reader.close();
+				logger.log(Level.SEVERE,"INVALID Location:>" + locationString + "<");
 				throw new BuildException("Cannot handle repository location: " + locationString);
 			}
 			reader.close();
