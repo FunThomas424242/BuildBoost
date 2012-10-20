@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
 import de.devboost.buildboost.BuildException;
 import de.devboost.buildboost.BuildScriptGeneratorRunner;
@@ -70,6 +71,11 @@ public class ScriptSaver {
 			} else {
 				content.append("<echo message=\"Build stage " + i + " is disabled and will not be executed.\" />");
 			}
+			
+			// Output the properties knowned to java classes
+			Properties properties=System.getProperties();
+			content.append("<echo message=\"PROPERTIES: " + properties.toString() +" \" />");
+			
 			if (i < lastStageNumber - 1) {
 				// we must regenerate the build scripts after each stage, 
 				// because stages can rely on the output of the previous one.
@@ -87,6 +93,7 @@ public class ScriptSaver {
 				content.append("</classpath>");
 				content.append("</java>");
 			}
+			
 		}
 		AntTarget masterTarget = new AntTarget("buildboost-master", content);
 		masterScript.addTarget(masterTarget);
