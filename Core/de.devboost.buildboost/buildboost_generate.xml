@@ -5,6 +5,7 @@
 		<java classname="de.devboost.buildboost.BuildScriptGeneratorRunner" failonerror="true">
 			<arg value="${workspace}" />
 			<arg value="${build_plugin_id}.BuildScriptGenerator" />
+			<arg value="${build_boost_repo_remote}" />
 			
 			<classpath>
 				<pathelement path="${build_dir}/build-boost-bin"/>

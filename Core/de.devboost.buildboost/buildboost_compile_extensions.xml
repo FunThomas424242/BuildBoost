@@ -5,6 +5,7 @@
 		<java classname="de.devboost.buildboost.BuildScriptGeneratorRunner" failonerror="true">
 			<arg value="${workspace}" />
 			<arg value="de.devboost.buildboost.BuildScriptGenerator" />
+			<arg value="${build_boost_repo_remote}" />
 			
 			<classpath>
 				<pathelement path="${buildboost_core_bin}"/>
