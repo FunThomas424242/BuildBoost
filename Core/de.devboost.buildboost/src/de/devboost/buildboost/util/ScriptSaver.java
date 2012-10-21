@@ -85,6 +85,7 @@ public class ScriptSaver {
 				content.append("<java fork=\"true\" classname=\"" + BuildScriptGeneratorRunner.class.getName() + "\" failonerror=\"true\">");
 				content.append("<arg value=\"${workspace}\" />");
 				content.append("<arg value=\"${build_plugin_id}.BuildScriptGenerator\"/>");
+				content.append("<arg value=\"${build_boost_repo_remote}\"/>");
 					
 				content.append("<classpath>");
 				content.append("<pathelement path=\"${basedir}/" + ARTIFACTS_FOLDER + "/" + PROJECTS_FOLDER + "/" + BUILD_BOOST_CORE_PROJECT_ID + "\" />");
