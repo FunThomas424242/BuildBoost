@@ -29,11 +29,15 @@ import de.devboost.buildboost.util.ScriptSaver;
 import de.devboost.buildboost.util.StreamUtil;
 
 public class BuildScriptGeneratorRunner {
+	
+	private static String boostRootRepoURL;
+	
+	public static String getBoostRootRepoURL(){ return boostRootRepoURL; }
 
 	public static void main(String[] args) throws BuildException {
-		if (args.length < 2) {
+		if (args.length < 3) {
 			System.out.println("Wrong call to BuildScriptGeneratorRunner.main().");
-			System.out.println("Usage: BuildScriptGeneratorRunner.main(pathToWorkspace, classToRun).");
+			System.out.println("Usage: BuildScriptGeneratorRunner.main(pathToWorkspace, classToRun, boostRootRepoURL).");
 			System.exit(1);
 			return;
 		}
@@ -43,6 +47,8 @@ public class BuildScriptGeneratorRunner {
 	private void run(String[] args) throws BuildException {
 		String workspace = args[0];
 		String classToRun = args[1];
+		//TODO dirty, maybe we could use System.properties?
+		boostRootRepoURL = args[2];
 		File stageFile = getStageFile(workspace);
 		String stage = readLastStage(stageFile);
 		int stageNumber = Integer.parseInt(stage);
