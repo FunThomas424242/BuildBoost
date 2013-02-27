@@ -41,6 +41,10 @@ public class EclipseUpdateSiteDeploymentSpec extends AbstractArtifact {
 		setIdentifier(identifier);
 		getUnresolvedDependencies().add(new UnresolvedDependency(EclipseUpdateSite.class, identifier, null, true, null, true, false, false));
 	}
+	
+	public File getFile() {
+		return file;
+	}
 
 	private void readVersionFile() {
 		properties = new Properties();
@@ -104,7 +108,6 @@ public class EclipseUpdateSiteDeploymentSpec extends AbstractArtifact {
 		}
 		return null;
 	}
-	
 
 	public String getSiteVendor() {
 		return getValue("site", "vendor");
@@ -125,6 +128,7 @@ public class EclipseUpdateSiteDeploymentSpec extends AbstractArtifact {
 		return getValue("site", "version");
 	}
 
+	/* Feature version are now retrieved from the feature descriptors
 	public String getFeatureVersion(String featureID) {
 		String featureVersion = getValue("feature", featureID, "version");
 		if (featureVersion == null) {
@@ -135,6 +139,7 @@ public class EclipseUpdateSiteDeploymentSpec extends AbstractArtifact {
 		}
 		return featureVersion;
 	}
+	*/
 
 	@Override
 	public long getTimestamp() {

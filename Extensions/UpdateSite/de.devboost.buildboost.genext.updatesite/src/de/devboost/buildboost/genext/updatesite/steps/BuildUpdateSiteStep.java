@@ -26,6 +26,7 @@ import de.devboost.buildboost.artifacts.EclipseFeature;
 import de.devboost.buildboost.artifacts.Plugin;
 import de.devboost.buildboost.genext.updatesite.artifacts.EclipseUpdateSite;
 import de.devboost.buildboost.genext.updatesite.artifacts.EclipseUpdateSiteDeploymentSpec;
+import de.devboost.buildboost.model.IDependable;
 import de.devboost.buildboost.util.XMLContent;
 
 public class BuildUpdateSiteStep extends AbstractAntTargetGenerator {
@@ -106,7 +107,7 @@ public class BuildUpdateSiteStep extends AbstractAntTargetGenerator {
 			File featureFile = feature.getFile();
 			String tempDir = distDir + File.separator + "temp_features";
 			String tempFeatureDir = tempDir + "/" + featureID;
-			String featureVersion = updateSiteSpec.getFeatureVersion(featureID);
+			String featureVersion = feature.getVersion();
 			String featureVendor = updateSiteSpec.getFeatureVendor(featureID);
 
 			content.append("<echo message=\"Building feature '" + featureID + "' for update site '" + updateSiteID + "'\"/>");
@@ -115,8 +116,18 @@ public class BuildUpdateSiteStep extends AbstractAntTargetGenerator {
 			content.append("<mkdir dir=\"" + tempFeatureDir + "\" />");
 			content.append("<copy file=\"" + featureFile.getAbsolutePath() + "\" tofile=\"" + tempFeatureDir + "/feature.xml\"/>");
 			content.append("<!-- set version in copy -->");
-			content.append("<replace file=\"" + tempFeatureDir + "/feature.xml\" token=\"0.0.0\" value=\"" + featureVersion + ".v${buildid}\"/>");
+			content.append("<replace file=\"" + tempFeatureDir + "/feature.xml\" token='\"0.0.0\"' value='\"" + featureVersion + ".v${buildid}\"'/>");
+			content.append("<replace file=\"" + tempFeatureDir + "/feature.xml\" token='\"" + featureVersion + "\"' value='\"" + featureVersion + ".v${buildid}\"'/>");
 			content.append("<replace file=\"" + tempFeatureDir + "/feature.xml\" token=\".qualifier\" value=\".v${buildid}\"/>");
+
+			Collection<IDependable> dependencies = feature.getDependencies();
+			for (IDependable dependency : dependencies) {
+				if (dependency instanceof EclipseFeature) {
+					EclipseFeature requiredFeature = (EclipseFeature) dependency;
+					content.append("<replaceregexp file=\"" + tempFeatureDir + "/feature.xml\" match='&lt;import feature=\"" + requiredFeature.getIdentifier() + "\"' replace='&lt;import feature=\"" + requiredFeature.getIdentifier() + "\" version=\"" + requiredFeature.getVersion() + "\" match=\"greaterOrEqual\"' />");
+				}
+			}
+			
 			content.append("<!-- create empty file 'feature.properties' -->");
 			content.append("<touch file=\"feature.properties\"/>");
 			content.append("<!-- create feature JAR -->");
